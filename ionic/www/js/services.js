@@ -30,7 +30,21 @@ angular.module('starter.services', [])
     lastText: 'This is wicked good ice cream.',
     face: 'img/mike.png'
   }];
-
+  var http = function(method,api,data){
+   return new Promise(function(resolve, reject){
+            $http({
+                  method: method,
+                  url:"http://localhost:3000/"+api,
+                  data:data
+            }).then(function(rep){
+                if(rep.data.status=='success'){
+                  resolve(rep.data)
+                }else{
+                  reject(rep.data)
+              }
+          })
+        }) 
+  }
   return {
     all: function() {
       return chats;
@@ -46,19 +60,8 @@ angular.module('starter.services', [])
       }
       return null;
     },
-      add:function(data){
-         var defer = $q.defer();
-            var promise = defer.promise;
-            $http({
-                method: "post",
-                url:"http://localhost:3000/addUser",
-                data:data
-            }).success(function(data){
-                $log.debug('成功',data)
-                defer.resolve(data);
-                return promise;
-            });
-            
+    add:function(data){
+        return http("post","addUser",data);
       }
   };
 });

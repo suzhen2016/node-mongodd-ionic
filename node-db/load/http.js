@@ -25,7 +25,7 @@ module.exports = function () {
         let route = require('../route/' + fileName)(app,express);
         app.use(route)
     }
-
+    console.log(body_parser.json())
     app.get('/add',function(req, res){
         res.send({status: '访问成功'});
     })

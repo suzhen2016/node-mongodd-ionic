@@ -62,6 +62,12 @@ angular.module('starter.services', [])
     },
     add:function(data){
         return http("post","addUser",data);
-      }
+    },
+    getList:function(){
+       return http("post","get_list");
+    },
+    ceshi:function(){
+        return http("get","y");
+    }
   };
 });

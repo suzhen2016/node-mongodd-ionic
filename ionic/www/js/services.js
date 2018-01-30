@@ -66,6 +66,9 @@ angular.module('starter.services', [])
     getList:function(){
        return http("post","get_list");
     },
+    deleUser:function(data){
+      return http('post',"dele_user",data)
+    },
     ceshi:function(){
         return http("get","y");
     }

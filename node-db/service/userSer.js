@@ -16,12 +16,30 @@ module.exports = {
     //验证存在与否
     isFind: function (param) {
         return new Promise(function (resolve, rejec) {
-            console.log(param)
-            userModel.getOne(param, function (error,data) {
+            var find = {'name': param.name};
+                //find.name = param.name;
+                console.log(find)
+            userModel.getOne(find, function (error,data) {
+                if (error) { //不存在返回false;
+                    rejec(false)
+                } else {
+                    if(data){
+                        console.log('找到',data)
+                        resolve(true)//存在返回true;    
+                    }
+                    
+                }
+            });
+        })
+    },
+    deleUser:function(param){
+        return new Promise(function (resolve, rejec) {
+            let obj = {'_id':param.id};
+            userModel.del(obj, function (error,data) {
                 if (error) {
                     rejec(false)
                 } else {
-                    resolve(data)
+                    resolve(true)
                 }
             });
         })

@@ -34,7 +34,7 @@ angular.module('starter.controllers', [])
         if(res.status=='success'){
             if(res.data){
               alert('删除成功')
-              vm.list.splice(index,1)
+              //vm.list.splice(index,1)
               console.log(vm.list.length)
             }else{
                alert('删除失败')
@@ -68,6 +68,13 @@ angular.module('starter.controllers', [])
 
   .controller('ChatDetailCtrl', function ($scope, $stateParams, XnServe) {
     $scope.chat = XnServe.get($stateParams.chatId);
+   
+    function get(){
+      XnServe.getOne({id:$stateParams.chatId}).then(function(res){
+        console.log(res)
+      })
+    }
+    get();
   })
 
   .controller('AccountCtrl', function ($scope) {

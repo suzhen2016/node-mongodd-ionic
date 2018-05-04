@@ -41,18 +41,30 @@ module.exports = function (app,express) {
         })
         
     });
+    //获取一个用户信息
+    router.post('/get_one', function (req, res, next) {
+        let param = req.body;
+        userSer.getOne(param).then(function(data){
+            let result = {
+                status: 'success',
+                data: data
+            };
+            res.json(result)
+             
+        })
+        
+    });
     //删除某用户
     router.post('/dele_user', function (req, res, next) {
         let param = req.body;
         console.log('dis',param)
-        userSer.deleUser(param).then(function(data){
+        userSer.isFindById(param).then(function(data){
             let result = {
                 status: 'success',
                 data: data
             };
             res.json(result)
         })
-        
     });
 
 

@@ -17,15 +17,17 @@ module.exports = {
     isFind: function (param) {
         return new Promise(function (resolve, rejec) {
             var find = {'name': param.name};
-                //find.name = param.name;
                 console.log(find)
-            userModel.getOne(find, function (error,data) {
+            userModel.getOne({find:find}, function (error,data) {
                 if (error) { //不存在返回false;
                     rejec(false)
                 } else {
                     if(data){
                         console.log('找到',data)
                         resolve(true)//存在返回true;    
+                    }else{
+                         console.log('没有找到',data)
+                        resolve(false)//不存在返回false;  
                     }
                     
                 }
@@ -44,6 +46,28 @@ module.exports = {
             });
         })
     },
+    isFindById: function (param) {
+        return new Promise(function (resolve, rejec) {
+            var find = {'_id':param.id};
+                //find.name = param.name;
+                console.log(find)
+            userModel.getById(param.id, function (error,data) {
+                if (error) { //不存在返回false;
+                    rejec(false)
+                } else {
+                    if(data){
+                        console.log('找到id',data)
+                        resolve(true)//存在返回true;    
+                    }else{
+                         console.log('找不到id',data)
+                        resolve(false)//存在返回true;    
+                    }
+                    
+                }
+            });
+        })
+    },
+    
     //获取所有用户
     getUser:function(param){
         if(!param) param = true
@@ -53,6 +77,24 @@ module.exports = {
                     rejec(false)
                 } else {
                     resolve(value)//返回查询到的结果；
+                }
+            });
+        })
+    },
+    //获取详情
+    getOne:function(param){
+        return new Promise(function (resolve, rejec) {
+            var find = {'_id': param.id};
+            userModel.getOne({find:find}, function (error,data) {
+                if (error) { //不存在返回false;
+                    rejec(false)
+                } else {
+                    if(data){
+                        resolve(data);
+                    }else{
+                        resolve({msg:'无效参数'});
+                    }
+                    
                 }
             });
         })

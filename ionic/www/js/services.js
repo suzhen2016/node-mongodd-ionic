@@ -71,6 +71,9 @@ angular.module('starter.services', [])
     },
     ceshi:function(){
         return http("get","y");
+    },
+    getOne:function(data){
+      return http('post','get_one',data)
     }
   };
 });

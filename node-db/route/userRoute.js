@@ -81,7 +81,7 @@ module.exports = function (app,express) {
 
     //测试
     router.get('/y', function (req, res, next) {
-       res.json({status:'yes'})
+       res.send({status:'yes'})
     });
 
     return router;

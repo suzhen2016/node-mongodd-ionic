@@ -1,4 +1,20 @@
 angular.module('starter.controllers', [])
+.directive('hideTabs', function ($rootScope) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attributes) {
+                scope.$on('$ionicView.beforeEnter', function () {
+                    scope.$watch(attributes.hideTabs, function (value) {
+                        $rootScope.hideTabs = value;
+                    });
+                });
+
+                scope.$on('$ionicView.beforeLeave', function () {
+                    $rootScope.hideTabs = false;
+                });
+            }
+        };
+    })
   //添加
   .controller('DashCtrl', ['ionicToast','XnServe', '$scope', '$log', '$q', '$http',
 
@@ -20,6 +36,29 @@ angular.module('starter.controllers', [])
          }
       })
     }
+
+
+    function timeout(ms) {
+      return new Promise((resolve, reject) => {
+        setTimeout(resolve, ms, 'done');
+      });
+    }
+
+      timeout(100).then((value) => {
+          console.log(value);
+      });
+
+      var promise = new Promise(function(resolve, reject) {
+        console.log('Promise');
+        resolve('成功了');
+      });
+
+      promise.then(function(val) {
+        console.log('结果',val)
+        console.log('resolved.');
+      });
+
+      console.log('Hi!');
     
   }])
 
@@ -67,11 +106,15 @@ angular.module('starter.controllers', [])
   })
 
   .controller('ChatDetailCtrl', function ($scope, $stateParams, XnServe) {
-    $scope.chat = XnServe.get($stateParams.chatId);
+    var vm = $scope.vm = this;
    
     function get(){
       XnServe.getOne({id:$stateParams.chatId}).then(function(res){
-        console.log(res)
+        if(res.status=='success'){
+          console.log(res.data)
+          vm.data = res.data;
+        }
+        
       })
     }
     get();

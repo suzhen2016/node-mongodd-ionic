@@ -64,9 +64,12 @@ angular.module('starter.controllers', [])
 
   .controller('ChatsCtrl', function ($scope, XnServe,$log) {
     var vm = $scope.vm = this;
+    vm.dele = {}
+   
     $scope.chats = XnServe.all();
     //删除用户
     vm.remove = function (index,id) {
+       vm.dele.wuWifi = false;
       console.log(index,id)
       //return false;
       XnServe.deleUser({id:id}).then(function(res){
@@ -81,6 +84,8 @@ angular.module('starter.controllers', [])
         }else{
            alert('请求失败，删除失败')
         }
+      },function(){
+        vm.dele.wuWifi = true;
       })
     };
     vm.list = [];
@@ -107,17 +112,114 @@ angular.module('starter.controllers', [])
 
   .controller('ChatDetailCtrl', function ($scope, $stateParams, XnServe) {
     var vm = $scope.vm = this;
-   
+    vm.query = {};
+    vm.addressList = [];
+    vm.add_btn = false;
+
     function get(){
       XnServe.getOne({id:$stateParams.chatId}).then(function(res){
         if(res.status=='success'){
           console.log(res.data)
           vm.data = res.data;
+          vm.query.user_id = res.data._id;
+        }else{
+
         }
         
+      },function(){
+
+      }).then(function(){
+        vm.addressList = [];
+        if(vm.query.user_id){
+          XnServe.getAddressList({'user_id':vm.query.user_id}).then(function(res){
+          if(res.status=='success'){
+            vm.addressList = res.data;
+            console.log('该用户的地址',res.data)
+          }
+        })
+        }
       })
     }
     get();
+
+    //新增地址
+    vm.setAddress = function(){
+      if(!vm.query.user_id){
+        console.log('缺少字段')
+        return false;
+      }
+      console.log(vm.query)
+      if(!vm.add_change_id){
+        delete vm.query.id;
+          XnServe.addAddr(vm.query).then(function(res){
+          if(res.status=='success'){
+            console.log('添加地址',res.data,vm.addressList)
+            vm.addressList.push(res.data)
+            $scope.$apply();
+          }else{
+            console.log('新增地址失败')
+          }
+        })
+      }else{ // 修改地址
+        vm.query.id = vm.add_change_id;
+         XnServe.chanegAddr(vm.query).then(function(res){
+          if(res.status=='success'){
+            console.log('修改地址',res.data)
+            if(res.data.noHas){
+              alert(res.data.msg)
+            }else{
+              vm.addressList.splice(vm.addressList.indexOf(vm.addressList.find((item)=>{
+                  return item._id = res.data._id;
+                })
+              ),1,res.data)
+            }
+            // vm.addressList.push(res.data)
+            $scope.$apply();
+          }else{
+            console.log('修改地址失败')
+          }
+        })
+      }
+      
+    }
+    //新增按钮切换；
+    vm.addNews = function(){
+      vm.add_btn = !vm.add_btn;
+      vm.add_change_id = '';
+      vm.query.district  = '';
+      vm.query.name = ''
+      vm.query.phone = '';
+    }
+    //修改地址
+    vm.changeAdr = function(item){
+      vm.add_btn = false;
+      if(vm.add_change_id==item._id){
+        vm.add_change_id = '';
+        return false;
+      }
+      vm.add_change_id = item._id;
+      vm.query.name = item.name;
+      vm.query.phone = item.phone;
+      vm.query.district  = item.district;
+    }
+    vm.deleAddr = function(item){
+      XnServe.deleAddr(item).then(function(res){
+          if(res.status=='success'){
+            console.log('删除地址',res.data)
+            if(res.data.id){
+              vm.addressList.splice(vm.addressList.indexOf(vm.addressList.find((item)=>{
+                  return item._id = res.data.id;
+                })
+              ),1)
+              $scope.$apply();
+            }else if(res.data.noHas){
+              alert(res.data.msg)
+            }
+          }else{
+            console.log('删除地址失败')
+          }
+        })
+    }
   })
 
   .controller('AccountCtrl', function ($scope) {

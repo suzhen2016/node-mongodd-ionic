@@ -74,6 +74,20 @@ angular.module('starter.services', [])
     },
     getOne:function(data){
       return http('post','get_one',data)
+    },
+    addAddr:function(data){
+      return http('post','add_addr',data)
+    },
+    getAddressList:function(data){
+      return http('post','get_addrss_list',data)
+    },
+    chanegAddr:function(data){
+      return http('post','change_address',data)
+    },
+    deleAddr:function(data){
+      return http('post','dele_address',data)
     }
+
+
   };
 });

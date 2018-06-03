@@ -57,7 +57,7 @@ module.exports = function (app,express) {
     //删除某用户
     router.post('/dele_user', function (req, res, next) {
         let param = req.body;
-        console.log('dis',param)
+       
         userSer.isFindById(param).then(function(data){
             let result = {
                 status: 'success',
@@ -66,6 +66,11 @@ module.exports = function (app,express) {
             res.json(result)
         })
     });
+    // 添加用户的地址
+    router.post('/add_address',function(req,res,next){
+        let data = req.body;
+        console.log(data)
+    })
 
 
 

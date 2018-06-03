@@ -1,12 +1,12 @@
 var modelCfg=require('../config/modelCfg');
-module.exports=modelCfg.creatModel('blog',{
-    PID: {type: String, required: true},  
+module.exports=modelCfg.creatModel('address',{
+    user_id: {type: String, required: true},  
     name: {type: String, required: true},
     phone:{type: Number, required: true},
-    city: {type: String, required: true},
-    province:{type:String,require:true},
+    // city: {type: String, required: true},
+    // province:{type:String,require:true},
     district:{type:String,require:true},
-    is_default:{type:Boolean},
+    is_default:{type:Boolean,default:false},
     time_creation: {
         type: Date, required: true, default: function () {
             return new Date();
